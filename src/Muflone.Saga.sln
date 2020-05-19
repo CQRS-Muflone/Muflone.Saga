@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muflone.Saga", "Muflone.Saga\Muflone.Saga.csproj", "{C151FB17-55F6-46DA-856C-082F3A675010}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muflone", "Muflone\src\Muflone\Muflone.csproj", "{011CD564-887E-418E-BA0F-FF1521915D5E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C151FB17-55F6-46DA-856C-082F3A675010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C151FB17-55F6-46DA-856C-082F3A675010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C151FB17-55F6-46DA-856C-082F3A675010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C151FB17-55F6-46DA-856C-082F3A675010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{011CD564-887E-418E-BA0F-FF1521915D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{011CD564-887E-418E-BA0F-FF1521915D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{011CD564-887E-418E-BA0F-FF1521915D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{011CD564-887E-418E-BA0F-FF1521915D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03B120BD-B245-4DA7-9C77-D16C14505C21}
+	EndGlobalSection
+EndGlobal
