@@ -1,26 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using Muflone.Saga.Persistence;
 
 namespace Muflone.Saga
 {
-	public abstract class SagaBase<TSagaData> : ISaga<TSagaData>, IEquatable<ISaga> where TSagaData : class
+	public abstract class Saga<TSagaData> : ISaga<TSagaData>, IEquatable<ISaga> where TSagaData : class
 	{
 		protected readonly ISagaRepository Repository;
+		public ISagaId Id { get; protected set; }
+		public IDictionary<string, object> Headers { get; set; }
+		public TSagaData SagaData { get; set; }
 
-		protected SagaBase(ISagaRepository repository)
+		protected Saga(ISagaRepository repository)
 		{
-			Repository = repository ?? throw new ArgumentNullException(nameof(repository));
+			Repository = repository;
 		}
 
-		public ISagaId Id { get; set; }
 
-		public TSagaData SagaData { get; set; }
+
+
+
+
+
+
 
 		public virtual bool Equals(ISaga other) => null != other && GetType() == other.GetType() && other.Id.GetType() == Id.GetType() && other.Id.Value == Id.Value;
 		public override bool Equals(object obj) => Equals(obj as ISaga);
 		public override int GetHashCode() => Id.Value.GetHashCode();
 
-		public static bool operator ==(SagaBase<TSagaData> saga1, SagaBase<TSagaData> saga2)
+		public static bool operator ==(Saga<TSagaData> saga1, Saga<TSagaData> saga2)
 		{
 			if ((object)saga1 == null && (object)saga2 == null)
 				return true;
@@ -31,7 +39,7 @@ namespace Muflone.Saga
 			return saga1.GetType() == saga2.GetType() && saga1.Id.GetType() == saga2.Id.GetType() &&
 						 saga1.Id.Value == saga2.Id.Value;
 		}
-		public static bool operator !=(SagaBase<TSagaData> saga1, SagaBase<TSagaData> saga2) => !(saga1 == saga2);
+		public static bool operator !=(Saga<TSagaData> saga1, Saga<TSagaData> saga2) => !(saga1 == saga2);
 
 	}
 }

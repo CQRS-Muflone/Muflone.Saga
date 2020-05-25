@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
@@ -6,7 +7,8 @@ namespace Muflone.Saga
 {
 	public interface ISaga
 	{
-		ISagaId Id { get; set; }
+		ISagaId Id { get; }
+		IDictionary<string, object> Headers { get; set; }
 	}
 
 	public interface ISaga<TSagaData> : ISaga where TSagaData : class

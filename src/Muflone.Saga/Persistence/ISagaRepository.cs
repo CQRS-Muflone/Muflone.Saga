@@ -6,21 +6,11 @@ namespace Muflone.Saga.Persistence
 {
 	public interface ISagaRepository
 	{
-		Task<TSaga> GetById<TSaga>(ISagaId id) where TSaga : class, ISaga;
+		Task<T> GetById<T>(ISagaId id) where T : class, ISaga;
 
-		Task Save(ISaga saga, Guid commitId, Action<IDictionary<string, object>> updateHeaders);
-		Task Save(ISaga saga, Guid commitId);
-
-		//TODO Logical delete
-		/// <summary>
-		/// Delete saga from storage
-		/// </summary>
-		Task Complete<TSaga>(TSaga saga) where TSaga : class, ISaga;
-
-		/// <summary>
-		/// Delete saga from storage
-		/// </summary>
-		Task Complete(ISagaId id);
+		Task Save<T>(T saga, IDictionary<string, object> updateHeaders) where T : class, ISaga;
+		Task Save<T>(T saga) where T : class, ISaga;
+		Task Complete<T>(T saga) where T : class, ISaga;
 	}
 
 }
