@@ -11,9 +11,9 @@ namespace Muflone.Saga
 		IDictionary<string, object> Headers { get; set; }
 	}
 
-	public interface ISaga<TSagaData> : ISaga where TSagaData : class
+	public interface ISaga<TSagaState> : ISaga where TSagaState : class
 	{
-		TSagaData SagaData { get; set; }
+		TSagaState SagaState { get; set; }
 	}
 	
 	public interface ISagaMessage

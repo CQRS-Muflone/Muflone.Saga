@@ -29,27 +29,34 @@ namespace Muflone.Saga
 
 	public class TestSaga : Saga<TestSaga.MyData>, IStartedBy<FakeCommand>, IEventHandler<FakeResponseEvent>
 	{
+		public ISagaId SagaId { get; set; }
+
 		public class MyData
 		{
 			private string value1;
 			private string value2;
 		}
 
-		public TestSaga(ISagaRepository repository) : base(repository)
+		
+		public async Task StartedBy(FakeCommand command)
 		{
+			var data = await Repository.GetById(Id);
+
+			
+
+			await Repository.Save(data);
 		}
 
-		public Task StartedBy(FakeCommand command)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ISagaId SagaId { get; set; }
 		public Task Handle(FakeResponseEvent command)
 		{
+			
+
 			throw new NotImplementedException();
 		}
 
-		
+
+		public TestSaga(ISagaRepository<MyData> repository) : base(repository)
+		{
+		}
 	}
 }
