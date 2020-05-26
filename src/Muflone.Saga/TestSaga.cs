@@ -29,7 +29,7 @@ namespace Muflone.Saga
 
 	public class TestSaga : Saga<TestSaga.MyData>, IStartedBy<FakeCommand>, IEventHandler<FakeResponseEvent>
 	{
-		public ISagaId SagaId { get; set; }
+		public ISagaId CorrelationId { get; set; }
 
 		public class MyData
 		{
@@ -40,7 +40,7 @@ namespace Muflone.Saga
 		
 		public async Task StartedBy(FakeCommand command)
 		{
-			var data = await Repository.GetById(Id);
+			var data = await Repository.GetById(base.CorrelationId);
 
 			
 

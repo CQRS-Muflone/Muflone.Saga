@@ -119,10 +119,10 @@ namespace Muflone.Eventstore.Persistence
   //	private IEventStream PrepareStream(string bucketId, ISaga saga, Dictionary<string, object> headers)
   //	{
   //		IEventStream stream;
-  //		var sagaKey = bucketId + "+" + saga.Id;
+  //		var sagaKey = bucketId + "+" + saga.CorrelationId;
   //		if (!_streams.TryGetValue(sagaKey, out stream))
   //		{
-  //			_streams[sagaKey] = stream = _eventStore.CreateStream(bucketId, saga.Id);
+  //			_streams[sagaKey] = stream = _eventStore.CreateStream(bucketId, saga.CorrelationId);
   //		}
 
   //		foreach (var item in headers)

@@ -7,7 +7,7 @@ namespace Muflone.Saga
 	public abstract class Saga<TSagaState> : ISaga<TSagaState>, IEquatable<ISaga> where TSagaState : class, new()
 	{
 		protected readonly ISagaRepository<TSagaState> Repository;
-		public ISagaId Id { get; protected set; }
+		public ISagaId CorrelationId { get; set; }
 		public IDictionary<string, object> Headers { get; set; }
 		public TSagaState SagaState { get; set; }
 
@@ -16,10 +16,9 @@ namespace Muflone.Saga
 			Repository = repository;
 		}
 
-		
-		public virtual bool Equals(ISaga other) => null != other && GetType() == other.GetType() && other.Id.GetType() == Id.GetType() && other.Id.Value == Id.Value;
+		public virtual bool Equals(ISaga other) => null != other && GetType() == other.GetType() && other.CorrelationId.GetType() == CorrelationId.GetType() && other.CorrelationId.Value == CorrelationId.Value;
 		public override bool Equals(object obj) => Equals(obj as ISaga);
-		public override int GetHashCode() => Id.Value.GetHashCode();
+		public override int GetHashCode() => CorrelationId.Value.GetHashCode();
 
 		public static bool operator ==(Saga<TSagaState> saga1, Saga<TSagaState> saga2)
 		{
@@ -29,8 +28,8 @@ namespace Muflone.Saga
 			if ((object)saga1 == null || (object)saga2 == null)
 				return false;
 
-			return saga1.GetType() == saga2.GetType() && saga1.Id.GetType() == saga2.Id.GetType() &&
-						 saga1.Id.Value == saga2.Id.Value;
+			return saga1.GetType() == saga2.GetType() && saga1.CorrelationId.GetType() == saga2.CorrelationId.GetType() &&
+						 saga1.CorrelationId.Value == saga2.CorrelationId.Value;
 		}
 		public static bool operator !=(Saga<TSagaState> saga1, Saga<TSagaState> saga2) => !(saga1 == saga2);
 

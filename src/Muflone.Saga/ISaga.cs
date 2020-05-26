@@ -7,7 +7,7 @@ namespace Muflone.Saga
 {
 	public interface ISaga
 	{
-		ISagaId Id { get; }
+		ISagaId CorrelationId { get; }
 		IDictionary<string, object> Headers { get; set; }
 	}
 
@@ -18,7 +18,7 @@ namespace Muflone.Saga
 	
 	public interface ISagaMessage
 	{
-		ISagaId SagaId { get; set; }
+		ISagaId CorrelationId { get; set; }
 	}
 
 	//A command starts the saga
@@ -28,7 +28,7 @@ namespace Muflone.Saga
 	}
 
 	//Could be a DomainEvent or an IntegrationEvent
-	public interface IEventHandler<in TEvent> where TEvent : IEvent
+	public interface IEventHandler<in TEvent>: ISagaMessage where TEvent : IEvent
 	{
 		Task Handle(TEvent command);
 	}
