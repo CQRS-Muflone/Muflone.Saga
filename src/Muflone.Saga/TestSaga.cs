@@ -10,7 +10,7 @@ namespace Muflone.Saga
 	public class FakeCommand : Command
 	{
 		public string Value1 { get; }
-
+		
 		protected FakeCommand(IDomainId aggregateId, string value1) : base(aggregateId)
 		{
 			Value1 = value1;
@@ -21,7 +21,7 @@ namespace Muflone.Saga
 	{
 		public string Value1 { get; }
 
-		public FakeResponseEvent(IDomainId aggregateId, string value1, string who = "anonymous") : base(aggregateId, who)
+		public FakeResponseEvent(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
 		{
 			Value1 = value1;
 		}
@@ -29,34 +29,31 @@ namespace Muflone.Saga
 
 	public class TestSaga : Saga<TestSaga.MyData>, IStartedBy<FakeCommand>, IEventHandler<FakeResponseEvent>
 	{
-		public ISagaId CorrelationId { get; set; }
-
 		public class MyData
 		{
 			private string value1;
 			private string value2;
 		}
 
-		
-		public async Task StartedBy(FakeCommand command)
+		public TestSaga(ISagaRepository<MyData> repository) : base(repository)
 		{
-			var data = await Repository.GetById(base.CorrelationId);
-
-			
-
-			await Repository.Save(data);
 		}
 
-		public Task Handle(FakeResponseEvent command)
+		public async Task StartedBy(FakeCommand command)
 		{
-			
+			//throw new NotImplementedException();
+			var data = await Repository.GetById(command.Headers.CorrelationId);
 
+			await Repository.Save(command.Headers.CorrelationId, data);
+		}
+
+		public Task Handle(FakeResponseEvent @event)
+		{
+			//@event.Headers.CorrelationId
 			throw new NotImplementedException();
 		}
 
 
-		public TestSaga(ISagaRepository<MyData> repository) : base(repository)
-		{
-		}
+		
 	}
 }

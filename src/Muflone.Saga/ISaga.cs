@@ -1,35 +1,30 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
+using System.Threading.Tasks;
 
 namespace Muflone.Saga
 {
 	public interface ISaga
 	{
-		ISagaId CorrelationId { get; }
-		IDictionary<string, object> Headers { get; set; }
+		//Guid CorrelationId { get; }
+		//TODO: Update headers of saga? We need them?
+		//IDictionary<string, object> Headers { get; set; }
 	}
 
 	public interface ISaga<TSagaState> : ISaga where TSagaState : class
 	{
 		TSagaState SagaState { get; set; }
 	}
-	
-	public interface ISagaMessage
-	{
-		ISagaId CorrelationId { get; set; }
-	}
 
 	//A command starts the saga
-	public interface IStartedBy<in TCommand> : ISagaMessage where TCommand : Command
+	public interface IStartedBy<in TCommand> where TCommand : ICommand
 	{
 		Task StartedBy(TCommand command);
 	}
 
 	//Could be a DomainEvent or an IntegrationEvent
-	public interface IEventHandler<in TEvent>: ISagaMessage where TEvent : IEvent
+	public interface IEventHandler<in TEvent> where TEvent : IEvent
 	{
-		Task Handle(TEvent command);
+		Task Handle(TEvent @event);
 	}
 }

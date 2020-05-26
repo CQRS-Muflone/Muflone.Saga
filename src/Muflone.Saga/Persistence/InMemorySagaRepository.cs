@@ -4,54 +4,56 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 //TODO: To implement in the persistence concrete code. Create also a package for MongoDB or RavenDB as an example?
-
 namespace Muflone.Saga.Persistence
 {
-	//TODO: Implement .ConfigureAwaiter(false) to be safe
 	public class InMemorySagaRepository<TSagaState> : ISagaRepository<TSagaState>, IDisposable where TSagaState : class, new()
 	{
-		private readonly ISagaSerializer serializer;
-		internal static readonly ConcurrentDictionary<ISagaId, string> Data = new ConcurrentDictionary<ISagaId, string>();
-		internal static readonly ConcurrentDictionary<ISagaId, string> Headers = new ConcurrentDictionary<ISagaId, string>();
+		private readonly ISerializer serializer;
+		internal static readonly ConcurrentDictionary<Guid, string> Data = new ConcurrentDictionary<Guid, string>();
+		//internal static readonly ConcurrentDictionary<Guid, string> Headers = new ConcurrentDictionary<Guid, string>();
 
-		public InMemorySagaRepository(ISagaSerializer serializer)
+		public InMemorySagaRepository(ISerializer serializer)
 		{
 			this.serializer = serializer;
 		}
 
-		public async Task<TSagaState> GetById(ISagaId id)
+		public async Task<TSagaState> GetById(Guid id)
 		{
 			if (!Data.TryGetValue(id, out var stateSerialized))
 				return default;
 
-			var headers = new ConcurrentDictionary<string, object>();
-			if (Headers.TryGetValue(id, out var headersSerialized))
-			{
-				headers = await serializer.Deserialize<ConcurrentDictionary<string, object>>(headersSerialized);
-			}
-
-			var state = await serializer.Deserialize<TSagaState>(stateSerialized);
-			return state;
+			//var headers = new ConcurrentDictionary<string, object>();
+			//if (Headers.TryGetValue(id, out var headersSerialized))
+			//	headers = await serializer.Deserialize<ConcurrentDictionary<string, object>>(headersSerialized);
+			
+			return await serializer.Deserialize<TSagaState>(stateSerialized).ConfigureAwait(false);
 		}
 
-		public Task Save(TSagaState sagaState)
+		public Task Save(Guid id, TSagaState sagaState)
 		{
-			return Save(sagaState, null);
+			return Save(id, sagaState, null);
 		}
 
-		public Task Save(TSagaState sagaState, IDictionary<string, object> updateHeaders)
+		public async Task Save(Guid id, TSagaState sagaState, IDictionary<string, object> updateHeaders)
 		{
-			throw new NotImplementedException();
+			var serializedData = await serializer.Serialize(sagaState);
+			//var serializedHeaders = await serializer.Serialize(updateHeaders);
+
+			Data[id] = serializedData;
+			//Headers[id] = serializedHeaders;
 		}
 
-		public Task Complete(TSagaState sagaState)
+		public Task Complete(Guid id)
 		{
-			throw new NotImplementedException();
+			Data.TryRemove(id, out _);
+			//Headers.TryRemove(id, out _);
+			return Task.CompletedTask;
 		}
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			Data.Clear();
+			//Headers.Clear();
 		}
 	}
 }

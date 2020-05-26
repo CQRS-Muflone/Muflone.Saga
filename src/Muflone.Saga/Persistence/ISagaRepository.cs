@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Muflone.Saga.Persistence
 {
+	//TODO: Is it possible to create a Repo agnostic to TSagaState? Make sense at all?
 	public interface ISagaRepository<TSagaState> where TSagaState : class, new()
 	{
-		//TODO: Is it possible to create a Repo agnostic to TSagaState? Make sense at all?
-		Task<TSagaState> GetById(ISagaId id);
-		Task Save(TSagaState sagaState, IDictionary<string, object> updateHeaders);
-		Task Save(TSagaState sagaState);
-		Task Complete(TSagaState sagaState);
+		Task<TSagaState> GetById(Guid id);
+		Task Save(Guid id, TSagaState sagaState, IDictionary<string, object> updateHeaders);
+		Task Save(Guid id, TSagaState sagaState);
+		Task Complete(Guid id);
 	}
 
 }
