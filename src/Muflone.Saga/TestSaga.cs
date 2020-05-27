@@ -11,7 +11,7 @@ namespace Muflone.Saga
 	{
 		public string Value1 { get; }
 		
-		protected FakeCommand(IDomainId aggregateId, string value1) : base(aggregateId)
+		public FakeCommand(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
 		{
 			Value1 = value1;
 		}
@@ -26,34 +26,53 @@ namespace Muflone.Saga
 			Value1 = value1;
 		}
 	}
+	public class FakeResponseErrorEvent : DomainEvent
+	{
+		public string Value1 { get; }
 
-	public class TestSaga : Saga<TestSaga.MyData>, IStartedBy<FakeCommand>, IEventHandler<FakeResponseEvent>
+		public FakeResponseErrorEvent(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
+		{
+			Value1 = value1;
+		}
+	}
+
+	public class TestSaga : Saga<TestSaga.MyData>, IStartedBy<FakeCommand>, IEventHandler<FakeResponseEvent>, IEventHandler<FakeResponseErrorEvent>
 	{
 		public class MyData
 		{
-			private string value1;
-			private string value2;
+			public string Value1;
+			public string Value2;
 		}
 
-		public TestSaga(ISagaRepository<MyData> repository) : base(repository)
+		public TestSaga(IServiceBus serviceBus, ISagaRepository<MyData> repository) : base(serviceBus, repository)
 		{
 		}
 
 		public async Task StartedBy(FakeCommand command)
 		{
-			//throw new NotImplementedException();
-			var data = await Repository.GetById(command.Headers.CorrelationId);
-
-			await Repository.Save(command.Headers.CorrelationId, data);
+			throw new NotImplementedException();
+			
+			//var data = new MyData(){Value1 = "abc", Value2 = "qwe"};
+			//serviceBus.Send(new Command())
+			//await Repository.Save(command.Headers.CorrelationId, data);
 		}
 
 		public Task Handle(FakeResponseEvent @event)
 		{
-			//@event.Headers.CorrelationId
 			throw new NotImplementedException();
+
+			//var data = await Repository.GetById(@event.Headers.CorrelationId);
+			//my logic
+			//serviceBus.Send(new Command())
+			//await Repository.Save(@event.Headers.CorrelationId, data);
+			// or
+			//await Repository.Complete(@event.Headers.CorrelationId);
 		}
 
 
-		
+		public Task Handle(FakeResponseErrorEvent @event)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

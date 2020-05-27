@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Muflone.Saga.Persistence
@@ -8,7 +7,7 @@ namespace Muflone.Saga.Persistence
 	public interface ISagaRepository<TSagaState> where TSagaState : class, new()
 	{
 		Task<TSagaState> GetById(Guid id);
-		Task Save(Guid id, TSagaState sagaState, IDictionary<string, object> updateHeaders);
+		//Task Save(Guid id, TSagaState sagaState, IDictionary<string, object> updateHeaders);
 		Task Save(Guid id, TSagaState sagaState);
 		Task Complete(Guid id);
 	}

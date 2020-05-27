@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 //TODO: To implement in the persistence concrete code. Create also a package for MongoDB or RavenDB as an example?
@@ -29,12 +28,12 @@ namespace Muflone.Saga.Persistence
 			return await serializer.Deserialize<TSagaState>(stateSerialized).ConfigureAwait(false);
 		}
 
-		public Task Save(Guid id, TSagaState sagaState)
-		{
-			return Save(id, sagaState, null);
-		}
+		//public Task Save(Guid id, TSagaState sagaState)
+		//{
+		//	return Save(id, sagaState, null);
+		//}
 
-		public async Task Save(Guid id, TSagaState sagaState, IDictionary<string, object> updateHeaders)
+		public async Task Save(Guid id, TSagaState sagaState /*, IDictionary<string, object> updateHeaders*/)
 		{
 			var serializedData = await serializer.Serialize(sagaState);
 			//var serializedHeaders = await serializer.Serialize(updateHeaders);
