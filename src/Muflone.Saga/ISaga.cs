@@ -6,9 +6,6 @@ namespace Muflone.Saga
 {
 	public interface ISaga
 	{
-		//Guid CorrelationId { get; }
-		//TODO: Update headers of saga? We need them?
-		//IDictionary<string, object> Headers { get; set; }
 	}
 
 	public interface ISaga<TSagaState> : ISaga where TSagaState : class
