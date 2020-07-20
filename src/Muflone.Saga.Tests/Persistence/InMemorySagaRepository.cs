@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Muflone.Saga.Persistence;
 
 //TODO: To implement in the persistence concrete code. Create also a package for MongoDB or RavenDB as an example?
-namespace Muflone.Saga.Persistence
+namespace Muflone.Saga.Tests.Persistence
 {
 	public class InMemorySagaRepository : ISagaRepository, IDisposable
 	{

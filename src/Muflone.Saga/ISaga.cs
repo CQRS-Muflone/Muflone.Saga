@@ -14,13 +14,13 @@ namespace Muflone.Saga
 	}
 
 	//A command starts the saga
-	public interface ISagaStartedBy<in TCommand> where TCommand : ICommand
+	public interface ISagaStartedBy<in TCommand> where TCommand : Command
 	{
 		Task StartedBy(TCommand command);
 	}
 
 	//Could be a DomainEvent or an IntegrationEvent
-	public interface ISagaEventHandler<in TEvent> where TEvent : IEvent
+	public interface ISagaEventHandler<in TEvent> where TEvent : Event
 	{
 		Task Handle(TEvent @event);
 	}
