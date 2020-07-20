@@ -36,7 +36,7 @@ namespace Muflone.Saga
 		}
 	}
 
-	public class TestSaga : Saga<TestSaga.MyData>, IStartedBy<FakeCommand>, IEventHandler<FakeResponseEvent>, IEventHandler<FakeResponseErrorEvent>
+	public class TestSaga : Saga<TestSaga.MyData>, ISagaStartedBy<FakeCommand>, ISagaEventHandler<FakeResponseEvent>, ISagaEventHandler<FakeResponseErrorEvent>
 	{
 		public class MyData
 		{

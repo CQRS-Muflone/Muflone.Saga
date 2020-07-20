@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Muflone\src\Muflone\Muflone.csproj" />
+    <ProjectReference Include="..\..\..\Muflone\src\Muflone\Muflone.csproj" />
   </ItemGroup>
 
 </Project>
