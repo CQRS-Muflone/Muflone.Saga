@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Muflone.Messages;
 using Muflone.Messages.Commands;
@@ -12,9 +11,7 @@ namespace Muflone.Saga.Tests.Persistence
 	{
 		private readonly Type _startingCommand;
 		private readonly Dictionary<Type, Event> _events;
-		//private readonly Dictionary<Type, List<Action<IMessage>>> routes = new Dictionary<Type, List<Action<IMessage>>>();
-
-
+		
 		private IList<ICommand> sentCommands = new List<ICommand>();
 
 		public InProcessServiceBus(Type startingCommand, Dictionary<Type, Event> events)
@@ -37,13 +34,11 @@ namespace Muflone.Saga.Tests.Persistence
 			{
 				await handlerForCommand.StartedBy((dynamic)command);
 				return;
-				//		return Task.CompletedTask;
 			}
 
 			var @event = _events[command.GetType()];
 			if (@event != null)
 				await handlerForCommand.Handle((dynamic)@event);
-			//return Task.CompletedTask;
 		}
 
 		public Task RegisterHandler<T>(Action<T> handler) where T : IMessage
