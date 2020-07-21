@@ -2,14 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Alessandro Colla, Alberto Acerbis</Authors>
+    <Copyright>Alessandro Colla, Alberto Acerbis and contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>CQRS-Muflone</Company>
+    <Description>Saga base implementation for Muflone</Description>
+    <PackageProjectUrl>https://github.com/CQRS-Muflone/Muflone.Saga</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CQRS-Muflone/Muflone.Saga</RepositoryUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>Muflone, Saga</PackageTags>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <None Include="..\..\..\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Muflone\src\Muflone\Muflone.csproj" />
+    <PackageReference Include="Muflone" Version="1.0.1" />
   </ItemGroup>
 
 </Project>

@@ -75,8 +75,8 @@ namespace Muflone.Saga.Tests
 
 		public Task Handle(FakeResponseError @event)
 		{
-			throw new NotImplementedException();
 			//revert strategies
+			throw new NotImplementedException();
 		}
 	}
 }

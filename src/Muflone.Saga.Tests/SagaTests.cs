@@ -39,11 +39,6 @@ namespace Muflone.Saga.Tests
 			var command = new FakeStartingCommand(new MyDomainId(Guid.NewGuid()), correlationId, "abc", "user_tester");
 			await serviceBus.Send(command);
 
-
-			//var data = await inMemorySagaRepository.GetById<SagaToTest.MyData>(correlationId);
-			//Assert.Equal("abc", data.Value1);
-			//Assert.Equal("qwe", data.Value2);
-
 			var commands = serviceBus.SentCommands();
 			Assert.Equal(2, commands.Count);
 			Assert.IsType<FakeStep2Command>(commands[1]);
