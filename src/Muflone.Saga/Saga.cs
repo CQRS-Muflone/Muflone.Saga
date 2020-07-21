@@ -1,4 +1,5 @@
-﻿using Muflone.Saga.Persistence;
+﻿using System;
+using Muflone.Saga.Persistence;
 
 namespace Muflone.Saga
 {
@@ -13,6 +14,24 @@ namespace Muflone.Saga
 		{
 			ServiceBus = serviceBus;
 			Repository = repository;
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+			}
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		~Saga()
+		{
+			Dispose(false);
 		}
 	}
 }
