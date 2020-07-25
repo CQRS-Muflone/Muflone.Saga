@@ -1,10 +1,11 @@
+using System;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
 using System.Threading.Tasks;
 
 namespace Muflone.Saga
 {
-	public interface ISaga
+	public interface ISaga : IDisposable
 	{
 	}
 
@@ -14,13 +15,13 @@ namespace Muflone.Saga
 	}
 
 	//A command starts the saga
-	public interface ISagaStartedBy<in TCommand> where TCommand : Command
+	public interface ISagaStartedBy<in TCommand> : IDisposable where TCommand : Command
 	{
 		Task StartedBy(TCommand command);
 	}
 
 	//Could be a DomainEvent or an IntegrationEvent
-	public interface ISagaEventHandler<in TEvent> where TEvent : Event
+	public interface ISagaEventHandler<in TEvent> : IDisposable where TEvent : Event
 	{
 		Task Handle(TEvent @event);
 	}
