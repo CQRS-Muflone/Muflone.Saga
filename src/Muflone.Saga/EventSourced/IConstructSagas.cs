@@ -1,3 +1,6 @@
+//TODO: Rename to SagaFactory
+
+
 //using System;
 
 //namespace Muflone.Saga.Persistence
