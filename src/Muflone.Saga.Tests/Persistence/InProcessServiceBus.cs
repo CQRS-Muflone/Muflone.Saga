@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Muflone.Messages;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
+using Muflone.Persistence;
 
 namespace Muflone.Saga.Tests.Persistence
 {
@@ -21,7 +23,7 @@ namespace Muflone.Saga.Tests.Persistence
 		}
 
 
-		public async Task Send<T>(T command) where T : class, ICommand
+		public async Task SendAsync<T>(T command, CancellationToken cancellationToken = default) where T : class, ICommand
 		{
 			if (command == null)
 				throw new ArgumentNullException(nameof(command));
@@ -53,5 +55,6 @@ namespace Muflone.Saga.Tests.Persistence
 		}
 
 		public IList<ICommand> SentCommands() => sentCommands;
+		
 	}
 }

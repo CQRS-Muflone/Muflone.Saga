@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Muflone.Messages.Commands;
+using Muflone.Persistence;
 using Muflone.Saga.Persistence;
 
 namespace Muflone.Saga

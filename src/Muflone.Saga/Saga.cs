@@ -1,4 +1,5 @@
 ﻿using System;
+using Muflone.Persistence;
 using Muflone.Saga.Persistence;
 
 namespace Muflone.Saga

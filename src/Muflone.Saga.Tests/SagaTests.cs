@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Muflone.Core;
 using Muflone.Messages.Events;
+using Muflone.Persistence;
 using Muflone.Saga.Tests.Persistence;
 using Xunit;
 
 namespace Muflone.Saga.Tests
 {
-
 	public class SagaTests
 	{
 		private SagaToTest saga;
@@ -18,7 +18,7 @@ namespace Muflone.Saga.Tests
 		public SagaTests()
 		{
 			saga = new SagaToTest(serviceBus, inMemorySagaRepository);
-			serviceBus = new InProcessServiceBus(typeof(FakeStartingCommand), new Dictionary<Type, Event>() { { typeof(FakeStep2Command), new FakeResponse(new MyDomainId(Guid.NewGuid()), correlationId,"zxc", "user" ) } });
+			serviceBus = new InProcessServiceBus(typeof(FakeStartingCommand), new Dictionary<Type, Event>() { { typeof(FakeStep2Command), new FakeResponse(new MyDomainId(Guid.NewGuid()), correlationId, "zxc") } });
 		}
 
 		public class MyDomainId : IDomainId
@@ -36,8 +36,8 @@ namespace Muflone.Saga.Tests
 		[Fact]
 		public async Task Saga_StartsWithCommand()
 		{
-			var command = new FakeStartingCommand(new MyDomainId(Guid.NewGuid()), correlationId, "abc", "user_tester");
-			await serviceBus.Send(command);
+			var command = new FakeStartingCommand(new MyDomainId(Guid.NewGuid()), correlationId, "abc");
+			await serviceBus.SendAsync(command);
 
 			var commands = serviceBus.SentCommands();
 			Assert.Equal(2, commands.Count);
