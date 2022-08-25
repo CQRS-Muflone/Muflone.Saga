@@ -29,4 +29,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Muflone" Version="6.1.0" />
+  </ItemGroup>
+
 </Project>

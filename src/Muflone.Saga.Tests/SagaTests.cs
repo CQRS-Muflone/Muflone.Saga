@@ -18,7 +18,9 @@ namespace Muflone.Saga.Tests
 		public SagaTests()
 		{
 			saga = new SagaToTest(serviceBus, inMemorySagaRepository);
-			serviceBus = new InProcessServiceBus(typeof(FakeStartingCommand), new Dictionary<Type, Event>() { { typeof(FakeStep2Command), new FakeResponse(new MyDomainId(Guid.NewGuid()), correlationId, "zxc") } });
+			serviceBus = new InProcessServiceBus(typeof(FakeStartingCommand),
+				new Dictionary<Type, Event>()
+					{ { typeof(FakeStep2Command), new FakeResponse(new MyDomainId(Guid.NewGuid()), correlationId, "zxc") } });
 		}
 
 		public class MyDomainId : IDomainId
@@ -45,7 +47,9 @@ namespace Muflone.Saga.Tests
 			Assert.Equal("abc", ((FakeStep2Command)commands[1]).Value1);
 
 			var data = await inMemorySagaRepository.GetById<SagaToTest.MyData>(correlationId);
-			Assert.Null(data);
+			Assert.NotNull(data);
+			Assert.Equal("abc", data.Value1);
+			Assert.Equal("qwe", data.Value2);
 		}
 	}
 }
