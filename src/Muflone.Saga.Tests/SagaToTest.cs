@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Muflone.Core;
+using Muflone.Messages;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
+using Muflone.Persistence;
 using Muflone.Saga.Persistence;
 
 namespace Muflone.Saga.Tests
@@ -11,9 +13,10 @@ namespace Muflone.Saga.Tests
 	{
 		public string Value1 { get; }
 
-		public FakeStartingCommand(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
+		public FakeStartingCommand(IDomainId aggregateId, Guid correlationId, string value1) : base(aggregateId)
 		{
 			Value1 = value1;
+			UserProperties[HeadersNames.CorrelationId] = correlationId.ToString();
 		}
 	}
 
@@ -21,9 +24,10 @@ namespace Muflone.Saga.Tests
 	{
 		public string Value1 { get; }
 
-		public FakeStep2Command(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
+		public FakeStep2Command(IDomainId aggregateId, Guid correlationId, string value1) : base(aggregateId)
 		{
 			Value1 = value1;
+			UserProperties[HeadersNames.CorrelationId] = correlationId.ToString();
 		}
 	}
 
@@ -31,18 +35,20 @@ namespace Muflone.Saga.Tests
 	{
 		public string Value1 { get; }
 
-		public FakeResponse(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
+		public FakeResponse(IDomainId aggregateId, Guid correlationId, string value1) : base(aggregateId)
 		{
 			Value1 = value1;
+			UserProperties[HeadersNames.CorrelationId] = correlationId.ToString();
 		}
 	}
 	public class FakeResponseError : DomainEvent
 	{
 		public string Value1 { get; }
 
-		public FakeResponseError(IDomainId aggregateId, Guid correlationId, string value1, string who = "anonymous") : base(aggregateId, correlationId, who)
+		public FakeResponseError(IDomainId aggregateId, Guid correlationId, string value1) : base(aggregateId)
 		{
 			Value1 = value1;
+			UserProperties[HeadersNames.CorrelationId] = correlationId.ToString();
 		}
 	}
 
@@ -61,8 +67,8 @@ namespace Muflone.Saga.Tests
 		public async Task StartedBy(FakeStartingCommand command)
 		{
 			var data = new MyData() { Value1 = command.Value1, Value2 = "qwe" };
-			await Repository.Save(command.Headers.CorrelationId, data);
-			await ServiceBus.Send(new FakeStep2Command(command.AggregateId, command.Headers.CorrelationId, data.Value1, command.Who));
+			await Repository.Save(Guid.Parse(command.UserProperties[HeadersNames.CorrelationId].ToString() ?? string.Empty), data);
+			await ServiceBus.SendAsync(new FakeStep2Command(command.AggregateId, Guid.Parse(command.UserProperties[HeadersNames.CorrelationId].ToString() ?? string.Empty), data.Value1));
 		}
 
 		public async Task Handle(FakeResponse @event)
