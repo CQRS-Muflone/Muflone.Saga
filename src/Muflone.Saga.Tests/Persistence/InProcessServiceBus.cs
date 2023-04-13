@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Muflone.Messages;
+﻿using Muflone.Messages;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
 using Muflone.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Muflone.Saga.Tests.Persistence
 {
@@ -13,8 +13,8 @@ namespace Muflone.Saga.Tests.Persistence
 	{
 		private readonly Type _startingCommand;
 		private readonly Dictionary<Type, Event> _events;
-		
-		private IList<ICommand> sentCommands = new List<ICommand>();
+
+		private IList<ICommand> _sentCommands = new List<ICommand>();
 
 		public InProcessServiceBus(Type startingCommand, Dictionary<Type, Event> events)
 		{
@@ -28,19 +28,19 @@ namespace Muflone.Saga.Tests.Persistence
 			if (command == null)
 				throw new ArgumentNullException(nameof(command));
 
-			sentCommands.Add(command);
+			_sentCommands.Add(command);
 
 			//Just for a fast test, do not this at home
 			var handlerForCommand = new SagaToTest(this, new InMemorySagaRepository(new Serializer()));
 			if (command.GetType() == _startingCommand)
 			{
-				await handlerForCommand.StartedBy((dynamic)command);
+				await handlerForCommand.StartedByAsync((dynamic)command);
 				return;
 			}
 
 			var @event = _events[command.GetType()];
 			if (@event != null)
-				await handlerForCommand.Handle((dynamic)@event);
+				await handlerForCommand.HandleAsync((FakeResponseError)(dynamic)@event);
 		}
 
 		public Task RegisterHandler<T>(Action<T> handler) where T : IMessage
@@ -54,7 +54,7 @@ namespace Muflone.Saga.Tests.Persistence
 			return Task.CompletedTask;
 		}
 
-		public IList<ICommand> SentCommands() => sentCommands;
-		
+		public IList<ICommand> SentCommands() => _sentCommands;
+
 	}
 }

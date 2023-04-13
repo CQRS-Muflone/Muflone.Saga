@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Muflone.Core;
+﻿using Muflone.Core;
 using Muflone.Messages;
 using Muflone.Messages.Commands;
 using Muflone.Messages.Events;
 using Muflone.Persistence;
 using Muflone.Saga.Persistence;
+using System;
+using System.Threading.Tasks;
 
 namespace Muflone.Saga.Tests
 {
@@ -52,7 +52,7 @@ namespace Muflone.Saga.Tests
 		}
 	}
 
-	public class SagaToTest : Saga<SagaToTest.MyData>, ISagaStartedBy<FakeStartingCommand>, ISagaEventHandler<FakeResponse>, ISagaEventHandler<FakeResponseError>
+	public class SagaToTest : Saga<SagaToTest.MyData>, ISagaStartedByAsync<FakeStartingCommand>, ISagaEventHandlerAsync<FakeResponse>, ISagaEventHandlerAsync<FakeResponseError>
 	{
 		public class MyData
 		{
@@ -64,22 +64,22 @@ namespace Muflone.Saga.Tests
 		{
 		}
 
-		public async Task StartedBy(FakeStartingCommand command)
+		public async Task StartedByAsync(FakeStartingCommand command)
 		{
 			var data = new MyData() { Value1 = command.Value1, Value2 = "qwe" };
-			await Repository.Save(Guid.Parse(command.UserProperties[HeadersNames.CorrelationId].ToString() ?? string.Empty), data);
+			await Repository.SaveAsync(Guid.Parse(command.UserProperties[HeadersNames.CorrelationId].ToString() ?? string.Empty), data);
 			await ServiceBus.SendAsync(new FakeStep2Command(command.AggregateId, Guid.Parse(command.UserProperties[HeadersNames.CorrelationId].ToString() ?? string.Empty), data.Value1));
 		}
 
-		public async Task Handle(FakeResponse @event)
+		public async Task HandleAsync(FakeResponse @event)
 		{
 			//var data = await Repository.GetById<MyData>(@event.Headers.CorrelationId);
 			//await Repository.Save(@event.Headers.CorrelationId, data);
 
-			await Repository.Complete(@event.Headers.CorrelationId);
+			await Repository.CompleteAsync(@event.Headers.CorrelationId);
 		}
 
-		public Task Handle(FakeResponseError @event)
+		public Task HandleAsync(FakeResponseError @event)
 		{
 			//revert strategies
 			throw new NotImplementedException();

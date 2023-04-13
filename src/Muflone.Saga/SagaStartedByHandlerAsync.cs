@@ -1,24 +1,24 @@
-﻿using System;
-using System.Threading.Tasks;
-using Muflone.Messages.Commands;
+﻿using Muflone.Messages.Commands;
 using Muflone.Persistence;
 using Muflone.Saga.Persistence;
+using System;
+using System.Threading.Tasks;
 
 namespace Muflone.Saga
 {
-	public abstract class SagaStartedByHandler<TCommand, TSagaState> : ISagaStartedBy<TCommand> where TCommand : Command
+	public abstract class SagaStartedByHandlerAsync<TCommand, TSagaState> : ISagaStartedByAsync<TCommand> where TCommand : Command
 			where TSagaState : class
 	{
 		protected readonly IServiceBus ServiceBus;
 		protected readonly ISagaRepository Repository;
 
-		protected SagaStartedByHandler(IServiceBus serviceBus, ISagaRepository repository)
+		protected SagaStartedByHandlerAsync(IServiceBus serviceBus, ISagaRepository repository)
 		{
-			this.ServiceBus = serviceBus;
-			this.Repository = repository;
+			ServiceBus = serviceBus;
+			Repository = repository;
 		}
 
-		public abstract Task StartedBy(TCommand command);
+		public abstract Task StartedByAsync(TCommand command);
 
 		#region Dispose
 		protected virtual void Dispose(bool disposing)
@@ -34,7 +34,7 @@ namespace Muflone.Saga
 			GC.SuppressFinalize(this);
 		}
 
-		~SagaStartedByHandler()
+		~SagaStartedByHandlerAsync()
 		{
 			Dispose(false);
 		}

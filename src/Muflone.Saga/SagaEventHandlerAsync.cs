@@ -1,23 +1,23 @@
-﻿using System;
-using System.Threading.Tasks;
-using Muflone.Messages.Events;
+﻿using Muflone.Messages.Events;
 using Muflone.Persistence;
 using Muflone.Saga.Persistence;
+using System;
+using System.Threading.Tasks;
 
 namespace Muflone.Saga
 {
-	public abstract class SagaEventHandler<TEvent> : ISagaEventHandler<TEvent> where TEvent : Event
+	public abstract class SagaEventHandlerAsync<TEvent> : ISagaEventHandlerAsync<TEvent> where TEvent : Event
 	{
 		protected readonly IServiceBus ServiceBus;
 		protected readonly ISagaRepository Repository;
 
-		protected SagaEventHandler(IServiceBus serviceBus, ISagaRepository repository)
+		protected SagaEventHandlerAsync(IServiceBus serviceBus, ISagaRepository repository)
 		{
-			this.ServiceBus = serviceBus;
-			this.Repository = repository;
+			ServiceBus = serviceBus;
+			Repository = repository;
 		}
 
-		public abstract Task Handle(TEvent @event);
+		public abstract Task HandleAsync(TEvent @event);
 
 		#region Dispose
 		protected virtual void Dispose(bool disposing)
@@ -33,7 +33,7 @@ namespace Muflone.Saga
 			GC.SuppressFinalize(this);
 		}
 
-		~SagaEventHandler()
+		~SagaEventHandlerAsync()
 		{
 			Dispose(false);
 		}
