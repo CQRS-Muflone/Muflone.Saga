@@ -6,6 +6,7 @@ using Muflone.Persistence;
 using Muflone.Saga.Persistence;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Muflone.Saga.Tests
 {
@@ -60,7 +61,7 @@ namespace Muflone.Saga.Tests
 			public string Value2;
 		}
 
-		public SagaToTest(IServiceBus serviceBus, ISagaRepository repository) : base(serviceBus, repository)
+		public SagaToTest(IServiceBus serviceBus, ISagaRepository repository) : base(serviceBus, repository, new NullLoggerFactory())
 		{
 		}
 
