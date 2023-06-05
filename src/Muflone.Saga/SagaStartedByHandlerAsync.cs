@@ -7,8 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Muflone.Saga
 {
-	public abstract class SagaStartedByHandlerAsync<TCommand, TSagaState> : ISagaStartedByAsync<TCommand> where TCommand : Command
-			where TSagaState : class
+	public abstract class SagaStartedByHandlerAsync<TCommand> : ISagaStartedByAsync<TCommand> where TCommand : Command
 	{
 		protected readonly IServiceBus ServiceBus;
 		protected readonly ISagaRepository Repository;
