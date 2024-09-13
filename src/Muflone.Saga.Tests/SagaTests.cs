@@ -20,25 +20,25 @@ namespace Muflone.Saga.Tests
 			_saga = new SagaToTest(_serviceBus, _inMemorySagaRepository);
 			_serviceBus = new InProcessServiceBus(typeof(FakeStartingCommand),
 				new Dictionary<Type, Event>()
-					{ { typeof(FakeStep2Command), new FakeResponse(new MyDomainId(Guid.NewGuid()), _correlationId, "zxc") } });
+					{ { typeof(FakeStep2Command), new FakeResponse(new MyDomainId(Guid.NewGuid().ToString()), _correlationId, "zxc") } });
 		}
 
 		public class MyDomainId : IDomainId
 		{
-			public Guid Value { get; }
+			public string Value { get; }
 
-			public MyDomainId(Guid value)
+			public MyDomainId(string value)
 			{
 				Value = value;
 			}
 		}
 
-		private Guid _correlationId = Guid.NewGuid();
+		private readonly Guid _correlationId = Guid.NewGuid();
 
 		[Fact]
 		public async Task Saga_StartsWithCommand()
 		{
-			var command = new FakeStartingCommand(new MyDomainId(Guid.NewGuid()), _correlationId, "abc");
+			var command = new FakeStartingCommand(new MyDomainId(Guid.NewGuid().ToString()), _correlationId, "abc");
 			await _serviceBus.SendAsync(command);
 
 			var commands = _serviceBus.SentCommands();
