@@ -110,3 +110,4 @@ UpgradeLog*.XML
 node_modules/
 .sass-cache/
 .idea/
+.cr/

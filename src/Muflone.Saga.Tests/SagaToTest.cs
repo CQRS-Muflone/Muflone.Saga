@@ -53,7 +53,7 @@ namespace Muflone.Saga.Tests
 		}
 	}
 
-	public class SagaToTest : Saga<SagaToTest.MyData>, ISagaStartedByAsync<FakeStartingCommand>, ISagaEventHandlerAsync<FakeResponse>, ISagaEventHandlerAsync<FakeResponseError>
+	public class SagaToTest : Saga<FakeStartingCommand, SagaToTest.MyData>,  ISagaEventHandlerAsync<FakeResponse>, ISagaEventHandlerAsync<FakeResponseError>
 	{
 		public class MyData
 		{
@@ -65,7 +65,7 @@ namespace Muflone.Saga.Tests
 		{
 		}
 
-		public async Task StartedByAsync(FakeStartingCommand command)
+		public override async Task StartedByAsync(FakeStartingCommand command)
 		{
 			var data = new MyData() { Value1 = command.Value1, Value2 = "qwe" };
 			await Repository.SaveAsync(Guid.Parse(command.UserProperties[HeadersNames.CorrelationId].ToString() ?? string.Empty), data);
