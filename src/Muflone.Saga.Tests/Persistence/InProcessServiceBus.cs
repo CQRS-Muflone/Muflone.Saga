@@ -30,7 +30,7 @@ namespace Muflone.Saga.Tests.Persistence
 
 			_sentCommands.Add(command);
 
-			//Just for a fast test, do not this at home
+			//Just for a fast test, do not do this at home
 			var handlerForCommand = new SagaToTest(this, new InMemorySagaRepository(new Serializer()));
 			if (command.GetType() == _startingCommand)
 			{
@@ -40,7 +40,7 @@ namespace Muflone.Saga.Tests.Persistence
 
 			var @event = _events[command.GetType()];
 			if (@event != null)
-				await handlerForCommand.HandleAsync((FakeResponseError)(dynamic)@event);
+				await handlerForCommand.HandleAsync((dynamic)@event);
 		}
 
 		public Task RegisterHandler<T>(Action<T> handler) where T : IMessage
