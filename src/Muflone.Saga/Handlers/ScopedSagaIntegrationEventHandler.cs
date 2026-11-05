@@ -28,10 +28,13 @@ public sealed class ScopedSagaIntegrationEventHandler<TEvent> : IIntegrationEven
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		await using var scope = _scopeFactory.CreateAsyncScope();
-		var handlers = scope.ServiceProvider.GetServices<ISagaEventHandlerAsync<TEvent>>();
+		await SagaConsumerActivity.TraceIntegrationEventAsync(message, async () =>
+		{
+			await using var scope = _scopeFactory.CreateAsyncScope();
+			var handlers = scope.ServiceProvider.GetServices<ISagaEventHandlerAsync<TEvent>>();
 
-		await SagaFanOut.DeliverAsync(handlers, message, (h, m) => h.HandleAsync(m), _logger);
+			await SagaFanOut.DeliverAsync(handlers, message, (h, m) => h.HandleAsync(m), _logger);
+		});
 	}
 
 	public void Dispose()

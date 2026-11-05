@@ -34,7 +34,8 @@ public sealed class SagaStartedByCommandHandler<TCommand> : ICommandHandlerAsync
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		return SagaFanOut.DeliverAsync(_handlers, message, (h, m) => h.StartedByAsync(m), _logger);
+		return SagaConsumerActivity.TraceCommandAsync(message,
+			() => SagaFanOut.DeliverAsync(_handlers, message, (h, m) => h.StartedByAsync(m), _logger));
 	}
 
 	public void Dispose()

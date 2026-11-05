@@ -32,7 +32,8 @@ public sealed class SagaIntegrationEventHandler<TEvent> : IIntegrationEventHandl
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		return SagaFanOut.DeliverAsync(_handlers, message, (h, m) => h.HandleAsync(m), _logger);
+		return SagaConsumerActivity.TraceIntegrationEventAsync(message,
+			() => SagaFanOut.DeliverAsync(_handlers, message, (h, m) => h.HandleAsync(m), _logger));
 	}
 
 	public void Dispose()
