@@ -33,10 +33,13 @@ public sealed class ScopedSagaStartedByCommandHandler<TCommand> : ICommandHandle
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		await using var scope = _scopeFactory.CreateAsyncScope();
-		var handlers = scope.ServiceProvider.GetServices<ISagaStartedByAsync<TCommand>>();
+		await SagaConsumerActivity.TraceCommandAsync(message, async () =>
+		{
+			await using var scope = _scopeFactory.CreateAsyncScope();
+			var handlers = scope.ServiceProvider.GetServices<ISagaStartedByAsync<TCommand>>();
 
-		await SagaFanOut.DeliverAsync(handlers, message, (h, m) => h.StartedByAsync(m), _logger);
+			await SagaFanOut.DeliverAsync(handlers, message, (h, m) => h.StartedByAsync(m), _logger);
+		});
 	}
 
 	public void Dispose()
